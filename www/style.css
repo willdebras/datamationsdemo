@@ -5,3 +5,11 @@ body {
 .form-control, .action-button {
   font-size: 18px;
 }
+
+.form-group > label {
+  font-size: 14px;
+}
+
+.h3 {
+  font-size:20px;
+}
