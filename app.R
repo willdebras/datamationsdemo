@@ -5,7 +5,7 @@ library(shinyAce)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  style = "max-width: 1000px;",
+  style = "max-width: 1200px;",
       # Send slider value, for changing tabs
     shiny::tags$script(shiny::HTML('
     $(document).ready(function() {
@@ -22,10 +22,10 @@ ui <- fluidPage(
     "),
   tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
   # Show a plot of the generated distribution
-  shiny::h1("Datamations"), 
-  uiOutput('constructors'),
-  uiOutput('editor'),
-  uiOutput('datamation_ui')
+  uiOutput('header', class = "header-container"),
+  uiOutput('constructors', class = "container"),
+  uiOutput('editor', class = "container"),
+  uiOutput('datamation_ui', class = "container")
 )
 
 # Define server logic required to draw a histogram
@@ -39,7 +39,13 @@ server <- function(session, input, output) {
     tab_change("slider")
   })
 
-        
+    output$header <- renderUI({
+      tagList(
+        tags$h1(class = "header", tags$span("{"), "datamations", tags$span("}"), "-"),
+        tags$p("a framework for the automatic generation of explanation of the steps of an analysis pipeline. It automatically turns code into animations, showing the state of the data at each step of an analysis")
+      )
+    })
+
     output$constructors <- renderUI({
       tagList(
         shiny::p("Construct a tidyverse pipeline by choosing from the options below. You select a data set, then up to three variables to group by, and finally a variable to summarize and a summary function to apply to it."),
@@ -81,7 +87,7 @@ server <- function(session, input, output) {
           ),
           shiny::column(
             width = 2,
-            shiny::actionButton(inputId = "go", "Go", width = "100%", style = "margin-top: 28px;")
+            shiny::actionButton(inputId = "go", HTML("Run <span>➜</span>"), width = "100px", style = "margin-top: 28px;")
           )
         )
       )
@@ -130,7 +136,6 @@ server <- function(session, input, output) {
     
     output$editor <- renderUI({
       shiny::tagList(
-        shiny::hr(),
         shiny::fluidRow(
           shinydashboard::box(
             width = 12,
@@ -138,12 +143,13 @@ server <- function(session, input, output) {
             shiny::h2("Pipeline"),
             shinyAce::aceEditor(
               outputId = "pipeline_editor",
+              height = "500px",
               mode = "r",
               fontSize = 16,
               readOnly = TRUE,
               highlightActiveLine = FALSE,
               autoScrollEditorIntoView = TRUE,
-              minLines = 2,
+              minLines = 5,
               maxLines = 30,
               value = "# Code will appear here based on selections above"
             ),
