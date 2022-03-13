@@ -21,6 +21,7 @@ ui <- fluidPage(
       });
     "),
   tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
+  shiny::includeHTML('githublink.html'),
   # Show a plot of the generated distribution
   uiOutput('header', class = "header-container"),
   uiOutput('constructors', class = "container"),
@@ -42,7 +43,7 @@ server <- function(session, input, output) {
     output$header <- renderUI({
       tagList(
         tags$h1(class = "header", tags$span("{"), "datamations", tags$span("}"), "-"),
-        tags$p("a framework for the automatic generation of explanation of the steps of an analysis pipeline. It automatically turns code into animations, showing the state of the data at each step of an analysis")
+        tags$p(tags$span("datamations is a framework for the automatic generation of explanation of the steps of an analysis pipeline. It automatically turns code into animations, showing the state of the data at each step of an analysis"))
       )
     })
 
@@ -92,7 +93,7 @@ server <- function(session, input, output) {
         )
       )
     })
-    
+
     dataset <- shiny::reactive({
       if(!is.null(input$dataset)) {
         switch(input$dataset,
@@ -103,13 +104,13 @@ server <- function(session, input, output) {
       }
     })
 
-  
+
     shiny::observe({
       if(is.null(dataset())) return()
       group_by_vars <- dataset() %>%
         dplyr::select_if(
-          sapply(., is.character) | 
-          sapply(., is.factor) | 
+          sapply(., is.character) |
+          sapply(., is.factor) |
           grepl("year",names(.))
           ) %>%
         names()
@@ -131,16 +132,16 @@ server <- function(session, input, output) {
         choices = summarise_vars
       )
     })
-    
+
     ## EDITOR AND PIPELINE HANDLING
-    
+
     output$editor <- renderUI({
       shiny::tagList(
         shiny::fluidRow(
           shinydashboard::box(
             width = 12,
             solidHeader = TRUE,
-            shiny::h2("Pipeline"),
+            shiny::h2("Pipeline", class = "header-two-short"),
             shinyAce::aceEditor(
               outputId = "pipeline_editor",
               height = "500px",
@@ -157,7 +158,7 @@ server <- function(session, input, output) {
         )
       )
     })
-    
+
     pipeline <- shiny::eventReactive(input$go, {
       pipeline_group_by <- !is.null(input$group_by)
       if (pipeline_group_by) {
@@ -166,8 +167,8 @@ server <- function(session, input, output) {
         glue::glue("{input$dataset} %>% summarize({input$summary_function} = {input$summary_function}({input$summary_var}, na.rm = TRUE))")
       }
     })
-    
-    
+
+
     shiny::observeEvent(input$go, {
       text <- c("library(dplyr)\n", pipeline())
       # Load dplyr
@@ -180,7 +181,7 @@ server <- function(session, input, output) {
       text <- styler::style_text(text)
       shinyAce::updateAceEditor(session, "pipeline_editor", value = paste0(text, collapse = "\n"))
     })
-    
+
     output$datamation_ui <- renderUI({
       shiny::fluidRow(
         shinydashboard::box(
@@ -188,32 +189,32 @@ server <- function(session, input, output) {
           solidHeader = TRUE,
           shiny::column(
             width = 6,
-            shiny::h2("Datamation"),
-            datamations::datamationSandDanceOutput("datamation")
+            shiny::h2("Datamation", class = "header-two-medium"),
+            datamations::datamationSandDanceOutput("datamation", height = 500)
           ),
           shiny::column(
             width = 6,
-            shiny::h2("Data Stages"),
+            shiny::h2("Data Stages", class = "header-two-long"),
             shiny::tabsetPanel(id = "data_tabs_panel")
           )
         )
       )
     })
-    
-    
+
+
     shiny::observeEvent(pipeline(), {
-      
+
       # Generate datamation -----
       datamation <- shiny::reactive({
         datamation_sanddance(pipeline(), height = 300, width = 300)
       })
-      
+
       # Create an output for it
       output$datamation <- datamations::renderDatamationSandDance({
         datamation()
       })
     })
-    
+
     # Handle the data stages tabset
 
     shiny::observeEvent(pipeline(), {
@@ -295,7 +296,8 @@ server <- function(session, input, output) {
           } else {
             content <- content %>%
               reactable::reactable(
-                fullWidth = FALSE
+                fullWidth = FALSE,
+                width = 400
               )
           }
 
@@ -414,7 +416,7 @@ server <- function(session, input, output) {
     # Handle 0 indexing in javascript
     slider - 1
   }
- 
+
 }
 
 # Run the application
