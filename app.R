@@ -43,13 +43,13 @@ server <- function(session, input, output) {
     output$header <- renderUI({
       tagList(
         tags$h1(class = "header", tags$span("{"), "datamations", tags$span("}"), "-"),
-        tags$p(tags$span("datamations is a framework for the automatic generation of explanation of the steps of an analysis pipeline. It automatically turns code into animations, showing the state of the data at each step of an analysis"))
+        tags$p(tags$span("{datamations} is a framework for the automatic generation of explanation of the steps of an analysis pipeline. It automatically turns code into animations, showing the state of the data at each step of an analysis. Test out the core functionality of the package by building a pipeline below."))
       )
     })
 
     output$constructors <- renderUI({
       tagList(
-        shiny::p("Construct a tidyverse pipeline by choosing from the options below. You select a data set, then up to three variables to group by, and finally a variable to summarize and a summary function to apply to it."),
+        shiny::p("Construct a tidyverse pipeline by choosing from the options below. Select a data set, then up to three variables to group by, and finally a variable to summarize and a summary function to apply to it."),
         shiny::hr(),
         shiny::fluidRow(
           shiny::column(
