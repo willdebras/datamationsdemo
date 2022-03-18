@@ -1,0 +1,13 @@
+name: datamationsdemo
+title: datamationsdemo
+username:
+account: willdebras
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5681311
+bundleId: 5684693
+url: https://willdebras.shinyapps.io/datamationsdemo/
+when: 1647310603.23929
+lastSyncTime: 1647310603.23929
+asMultiple: FALSE
+asStatic: FALSE

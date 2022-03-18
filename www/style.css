@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
 :root {
   --background-color: #FAF9F6;
   --font-color: #555;
@@ -7,6 +9,11 @@ body {
   font-size: 14px;
   background-color: var(--background-color);
   color: var(--font-color);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+h1, h2, h3, h4 {
+  font-weight:400;
 }
 
 .form-control, .action-button {
@@ -23,13 +30,13 @@ body {
 
 .header {
   font-size:4rem;
-  font-weight:200;
+  font-weight:300;
   margin-top:0;
 }
 
 .header > span {
   font-size:5rem;
-  font-weight:700;
+  font-weight:500;
   background-color: lightyellow;
   padding: 0 4px 4px 4px;
   margin-right:-4px;
@@ -50,7 +57,7 @@ body {
   font-size:16px;
   margin-top:10px;
   margin-bottom: 0;
-  line-height:2;
+  line-height:2.2;
   display: inline;
   margin-bottom: 1rem;
   display: inline-block;

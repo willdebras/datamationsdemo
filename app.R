@@ -43,7 +43,7 @@ server <- function(session, input, output) {
     output$header <- renderUI({
       tagList(
         tags$h1(class = "header", tags$span("{"), "datamations", tags$span("}"), "-"),
-        tags$p(tags$span("{datamations} is a framework for the automatic generation of explanation of the steps of an analysis pipeline. It automatically turns code into animations, showing the state of the data at each step of an analysis. Test out the core functionality of the package by building a pipeline below."))
+        tags$p(tags$span("{datamations} is a framework for the automatic generation of explanation of the steps of an analysis pipeline. It automatically turns code into animations, showing the state of the data at each step of an analysis. Test out the functionality of the package by building a pipeline below."))
       )
     })
 
@@ -194,7 +194,7 @@ server <- function(session, input, output) {
           ),
           shiny::column(
             width = 6,
-            shiny::h2("Data Stages", class = "header-two-long"),
+            shiny::h2("Data stages", class = "header-two-long"),
             shiny::tabsetPanel(id = "data_tabs_panel")
           )
         )
@@ -302,13 +302,13 @@ server <- function(session, input, output) {
           }
 
           # Create and append tab
-          tab <- shiny::tabPanel(names(data_states_tabs)[[i]], shiny::h3(shiny::p(data_states_titles[[i]])), content, value = i)
+          tab <<- shiny::tabPanel(names(data_states_tabs)[[i]], shiny::h3(shiny::p(data_states_titles[[i]])), content, value = i)
           shiny::appendTab(inputId = "data_tabs_panel", tab, select = i == 1, session = session)
         }
       )
     })
 
-    # Change the tab shown based on the slider ----
+    # # Change the tab shown based on the slider ----
     shiny::observeEvent(slider_state(), {
       selected_tab <- determine_tab_from_slider(slider_state(), input$group_by)
       selected_tab <- as.character(selected_tab)
