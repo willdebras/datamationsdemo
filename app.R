@@ -51,46 +51,37 @@ server <- function(session, input, output) {
       tagList(
         shiny::p("Construct a tidyverse pipeline by choosing from the options below. Select a data set, then up to three variables to group by, and finally a variable to summarize and a summary function to apply to it."),
         shiny::hr(),
-        shiny::fluidRow(
-          shiny::column(
-            width = 3,
+          tags$div(
+            class = "button-container",
             shiny::selectInput(inputId = "dataset",
                                "Dataset",
+                               width = "150px",
                                selected = "small_salary",
                                choices = c("small_salary", "penguins", "jeter_justice"),
-            )
-          ),
-          shiny::column(
-            width = 3,
+            ),
+            #tags$button(class = "add-button", shiny::icon("plus")),
             shiny::selectInput(
               inputId = "group_by",
               "Group by",
+              width = "150px",
               choices = c("Work", "Degree"),
               selected = "Degree",
               multiple = TRUE
-            )
-          ),
-          shiny::column(
-            width = 2,
+            ),
             shiny::selectInput(
               inputId = "summary_variable",
+              width = "150px",
               "Summary variable",
               choices = "Salary"
-            )
-          ),
-          shiny::column(
-            width = 2,
+            ),
             shiny::selectInput(
               inputId = "summary_function",
+              width = "150px",
               "Summary function",
-              choices = c("mean", "median", "min", "max")
-            )
-          ),
-          shiny::column(
-            width = 2,
-            shiny::actionButton(inputId = "go", HTML("Run <span>➜</span>"), width = "100px", style = "margin-top: 28px;")
+              choices = c("mean" = "mean", "median", "min", "max", "quantile")
+            ),
+            shiny::actionButton(inputId = "go", HTML("Run <span>➜</span>"), width = "100px", style = "height: 40px;")
           )
-        )
       )
     })
 
@@ -162,8 +153,12 @@ server <- function(session, input, output) {
     pipeline <- shiny::eventReactive(input$go, {
       pipeline_group_by <- !is.null(input$group_by)
       if (pipeline_group_by) {
-        glue::glue("{input$dataset} %>% group_by({paste0(input$group_by, collapse = ', ')}) %>% summarize({input$summary_function} = {input$summary_function}({input$summary_variable}, na.rm = TRUE))")
-      } else {
+        if(input$summary_function=="quantile") {
+          glue::glue("{input$dataset} %>% group_by({paste0(input$group_by, collapse = ', ')}) %>% summarize({input$summary_function} = {input$summary_function}({input$summary_variable}, 0.1))")
+        } else {
+          glue::glue("{input$dataset} %>% group_by({paste0(input$group_by, collapse = ', ')}) %>% summarize({input$summary_function} = {input$summary_function}({input$summary_variable}, na.rm = TRUE))")
+        }
+        } else {
         glue::glue("{input$dataset} %>% summarize({input$summary_function} = {input$summary_function}({input$summary_var}, na.rm = TRUE))")
       }
     })
