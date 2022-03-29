@@ -190,7 +190,10 @@ server <- function(session, input, output) {
           shiny::column(
             width = 6,
             shiny::h2("Data stages", class = "header-two-long"),
-            shiny::tabsetPanel(id = "data_tabs_panel")
+            shiny::tabsetPanel(id = "data_tabs_panel",
+                               tabPanel("1"),
+                               tabPanel("2"),
+                               tabPanel("3"))
           )
         )
       )
